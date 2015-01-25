@@ -3,13 +3,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,7 +13,6 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.JTabbedPane;
 import javax.swing.JList;
-import javax.swing.UIManager;
 
 
 public class Lab2Swing extends JFrame {
@@ -52,6 +45,7 @@ public class Lab2Swing extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(500,400));
+		setResizable(false);
 		getContentPane().setLayout(null);
 		 
 		JTabbedPane tabbedPane = new JTabbedPane();
@@ -127,7 +121,7 @@ public class Lab2Swing extends JFrame {
 	});
         
 	}
-	
+	//Creates the box to add items to the list
 	private void AddBox()
 	{
 		final JFrame frame = new JFrame();
@@ -135,20 +129,20 @@ public class Lab2Swing extends JFrame {
 		frame.setMinimumSize(new Dimension(400,150));
 		frame.setResizable(false);
 		frame.setTitle("Enter new company name");
-		frame.setLayout(null);
+		frame.getContentPane().setLayout(null);
 		
 		final JLabel label = new JLabel();
 		label.setText("What is the new company?");
 		label.setBounds(50, 10, 200, 50);
-		frame.add(label);
+		frame.getContentPane().add(label);
 		
 		final JTextField textField = new JTextField();
 		textField.setBounds(45,45,300,25);
-		frame.add(textField);
+		frame.getContentPane().add(textField);
 		
 		JButton okButton = new JButton("OK");
 		okButton.setBounds(110, 80, 85, 25);
-		frame.add(okButton);
+		frame.getContentPane().add(okButton);
 		okButton.addActionListener(new ActionListener()
 		{
 			  @SuppressWarnings("unchecked")
@@ -170,7 +164,7 @@ public class Lab2Swing extends JFrame {
 		
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setBounds(195, 80, 85, 25);
-		frame.add(cancelButton);
+		frame.getContentPane().add(cancelButton);
 		cancelButton.addActionListener(new ActionListener()
 		{
 			  public void actionPerformed(ActionEvent e)
