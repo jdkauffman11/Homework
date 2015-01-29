@@ -219,7 +219,7 @@ public class Lab2Swing extends JFrame {
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
 
 			DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(animal);
-	    
+            
 			model.insertNodeInto(newNode, node, node.getChildCount());
 		}
 		else
