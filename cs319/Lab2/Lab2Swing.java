@@ -3,21 +3,18 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.JTabbedPane;
 import javax.swing.JList;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 
@@ -25,6 +22,7 @@ public class Lab2Swing extends JFrame {
 	private static DataModel dm;
 	private JPanel contentPane;
 	private JList list;
+	private JTree tree;
 
 	/**
 	 * Launch the application.
@@ -91,13 +89,58 @@ public class Lab2Swing extends JFrame {
 		JScrollPane treeScroll = new JScrollPane();
 		treeScroll.setBounds(5, 5, 470, 275);
 		
-		JTree tree = new JTree(CreateInitialTree());
+		tree = new JTree(CreateInitialTree());
 		treeScroll.setRowHeaderView(tree);
 		
 		treeScroll.setViewportView(tree);
 		treePanel.add(treeScroll);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		tabbedPane.addTab("Tree", null, treePanel, null);
+		
+		
+		//Adds a button to the tree
+		JButton treeAddButton = new JButton("Add");
+		treeAddButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//If there is no item selected, the AddTreeBox method will not be called, eliminating an error
+				if(tree.getLastSelectedPathComponent() != null || tree.getModel().getRoot() == null)
+				{
+					AddTreeBox();
+				}
+			}
+		});
+		
+		treeAddButton.setBounds(120, 292, 117, 29);
+		treePanel.add(treeAddButton);
+		
+		JButton treeRemoveButton = new JButton("Remove");
+		treeRemoveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//If there is no item selected, the AddTreeBox method will not be called, eliminating an error
+				if(tree.getLastSelectedPathComponent() != null)
+				{
+					if(tree.getLastSelectedPathComponent() != tree.getModel().getRoot())
+					{
+						DefaultMutableTreeNode node;
+						DefaultTreeModel model = (DefaultTreeModel) (tree.getModel());
+						TreePath[] paths = tree.getSelectionPaths();
+						for (int i = 0; i < paths.length; i++) 
+						{
+							node = (DefaultMutableTreeNode) (paths[i].getLastPathComponent());
+							model.removeNodeFromParent(node);
+						}
+					}
+					else
+					{
+						((DefaultTreeModel) tree.getModel()).setRoot(null);
+					}
+					
+				}
+			}
+		});
+		
+		treeRemoveButton.setBounds(249, 292, 117, 29);
+		treePanel.add(treeRemoveButton);
 		
 		//Table is added but not implemented because table is not used in this lab.
 		tabbedPane.addTab("Table", null);
@@ -121,7 +164,7 @@ public class Lab2Swing extends JFrame {
 		  public void actionPerformed(ActionEvent e)
 		  {
 	
-			  AddBox();
+			  AddListBox();
 		  }
 	});
 	
@@ -147,7 +190,7 @@ public class Lab2Swing extends JFrame {
         
 	}
 	//Creates the box to add items to the list
-	private void AddBox()
+	private void AddListBox()
 	{
 		String company = (String) JOptionPane.showInputDialog(contentPane, 
 				"What is the new company?", "Enter the new company name.", JOptionPane.QUESTION_MESSAGE);
@@ -163,10 +206,35 @@ public class Lab2Swing extends JFrame {
 
 	}
 	
+	private void AddTreeBox()
+	{// variable named animal because this tree is only to add animals
+		String animal = (String) JOptionPane.showInputDialog(contentPane, 
+				"What is the new animal?", "Enter new animal name.", JOptionPane.QUESTION_MESSAGE);
+		if((DefaultMutableTreeNode) tree.getModel().getRoot() != null)
+		{
+			DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+			DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+
+			TreePath path = tree.getSelectionPath();
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+
+			DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(animal);
+	    
+			model.insertNodeInto(newNode, node, node.getChildCount());
+		}
+		else
+		{
+			((DefaultTreeModel) tree.getModel()).setRoot(new DefaultMutableTreeNode(animal));
+		}
+		
+		
+	    		
+	}
+	
+	
 	private DefaultMutableTreeNode CreateInitialTree()
 	{
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Animals");
-		
 		
 		DefaultMutableTreeNode temp = new DefaultMutableTreeNode("Mammals");
 		root.add(temp);
@@ -200,6 +268,7 @@ public class Lab2Swing extends JFrame {
 		temp.add(new DefaultMutableTreeNode("Swordfish"));
 		temp.add(new DefaultMutableTreeNode("Shark"));
 		temp.add(new DefaultMutableTreeNode("Whale"));
+		
 		return root;
 		
 	}
