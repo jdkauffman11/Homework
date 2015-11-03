@@ -91,7 +91,7 @@ void main()
   float angle = pow(max(0.0, dot(-D, L)), s);
 
   // add the components together
-  gl_FragColor = specularColor * specularFactor + diffuseColor * diffuseFactor + ambientColor;
+  gl_FragColor = specularColor * specularFactor + (diffuseColor * diffuseFactor + ambientColor) * angle ;
   gl_FragColor.a = 1.0;
 }
 </script>
