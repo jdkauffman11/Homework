@@ -328,12 +328,12 @@ function handleKeyPress(event)
     theObject.rotateX(-5); // same as look down
     break;
   case 'c':
-    s++;
+    s = s + 1;
     break;
   case 'C':
     if(s >= 0)
     {
-      s--;
+      s = s - 1;
     }
     break;
 
@@ -401,7 +401,7 @@ function draw()
   // set light direction
   var ld = lightDirection;
   loc = gl.getUniformLocation(lightingShader, "lightDirection");
-  gl.uniform4f(loc, ld[0], ld[1], ld[2], 1.0);
+  gl.uniform4f(loc, -theObject.rotation.elements[8], -theObject.rotation.elements[9], -theObject.rotation.elements[10], 1.0);
 
   // set exponent s
   loc = gl.getUniformLocation(lightingShader, "s");

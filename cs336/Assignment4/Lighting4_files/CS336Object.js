@@ -207,7 +207,7 @@ CS336Object.prototype.rotateX = function(degrees)
 CS336Object.prototype.rotateY = function(degrees)
 {
   // We can do this as an intrinsic y-rotation
-  //this.rotation.rotate(degrees, 0, 1, 0);
+  this.rotation.rotate(degrees, 0, 1, 0);
   
   // Alternatively, multiply on left by a rotation about the object's y-axis,
   // which is the second column of rotation matrix

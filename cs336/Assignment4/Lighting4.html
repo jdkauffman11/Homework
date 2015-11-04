@@ -19,14 +19,21 @@ uniform mat4 projection;
 uniform mat3 normalMatrix;
 uniform vec4 lightPosition;
 
+uniform vec4 lightDirection;
+
 attribute vec4 a_Position;
 attribute vec3 a_Normal;
 
 varying vec3 fL;
 varying vec3 fN;
 varying vec3 fV;
+varying vec3 fD;
 void main() 
 {
+
+  // Transform the direction into eye coordinates.
+  vec4 eyeD = view * lightDirection;
+
   // convert position to eye coords
   vec4 positionEye = view * model * a_Position;
 
@@ -35,6 +42,9 @@ void main()
 
   // vector to light
   fL = (lightEye - positionEye).xyz;
+
+  // position vector
+  fD = (eyeD - positionEye).xyz;
 
   // transform normal vector into eye coords
   fN = normalMatrix * a_Normal;
@@ -52,25 +62,20 @@ uniform mat3 materialProperties;
 uniform mat3 lightProperties;
 uniform float shininess;
 
-mat4 view;
-uniform vec4 lightDirection;
 uniform mediump float s;
 
 varying vec3 fL;
 varying vec3 fN;
 varying vec3 fV;
+varying vec3 fD;
 void main() 
 {
-
-  // Transform the direction into eye coordinates.
-  vec4 eyeD = view * lightDirection;
-
-  vec3 D = eyeD.xyz;
 
   // normalize after interpolating
   vec3 N = normalize(fN);
   vec3 L = normalize(fL);
   vec3 V = normalize(fV);
+  vec3 D = normalize(fD);
 
   // reflected vector
   vec3 R = reflect(-L, N);
@@ -91,7 +96,9 @@ void main()
   float angle = pow(max(0.0, dot(-D, L)), s);
 
   // add the components together
-  gl_FragColor = specularColor * specularFactor + (diffuseColor * diffuseFactor + ambientColor) * angle ;
+  vec4 calculation = specularColor * specularFactor + diffuseColor * diffuseFactor + ambientColor;
+
+  gl_FragColor = calculation * angle;
   gl_FragColor.a = 1.0;
 }
 </script>
